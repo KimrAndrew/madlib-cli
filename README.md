@@ -17,3 +17,6 @@
 [More on Regex Methods](https://pynative.com/python-regex-pattern-matching/#h-understand-the-match-object)
 
 [Using .sub to Replace Substrings](https://stackabuse.com/replace-occurrences-of-a-substring-in-string-with-python/)
+
+## PR
+[https://github.com/KimrAndrew/madlib-cli/pull/1](https://github.com/KimrAndrew/madlib-cli/pull/1)
