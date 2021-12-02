@@ -13,7 +13,16 @@ def read_template(path):
         return contents
 
 def parse_template(file_contents):
+    # regex built based off of answers from https://stackoverflow.com/questions/3335562/regex-to-select-everything-between-two-characters
+    # original idea was to use {(\w{1,} ?)*} however this did not account for prompts containing punctuation or numbers
+    # regex matches any characters between { and }, the ? makes it so that the match ends after the next closing curly bracket rather than the last closing curly in given string
     regex = r'{.*?}'
-    return re.sub(regex,'{}',file_contents)
-
-print(parse_template(read_template('assets/dark_and_stormy_night_template.txt')))
+    stripped = re.sub(regex,'{}',file_contents)
+    parts = re.findall(regex, file_contents)
+    stripped_parts = []
+    for prompt in parts:
+        prompt = re.sub(r'{|}','',prompt)
+        stripped_parts.append(prompt)
+    stripped_parts = tuple(stripped_parts)
+    return stripped,stripped_parts
+        
