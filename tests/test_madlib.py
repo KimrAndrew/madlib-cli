@@ -1,5 +1,5 @@
 import pytest
-from madlib_cli.madlib import read_template, parse_template, merge
+from madlib_cli.madlib import read_template, parse_template, merge, strip_template
 
 
 def test_proof_of_life():
@@ -11,7 +11,12 @@ def test_read_template_returns_stripped_string():
     expected = "It was a {Adjective} and {Adjective} {Noun}."
     assert actual == expected
 
-
+def test_strip_template():
+    file_contents = read_template("assets/dark_and_stormy_night_template.txt")
+    actual = strip_template(file_contents)
+    expected = "It was a {} and {} {}."
+    assert actual == expected
+    
 def test_parse_template():
     actual_stripped, actual_parts = parse_template(
         "It was a {Adjective} and {Adjective} {Noun}."

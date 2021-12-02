@@ -19,10 +19,19 @@ def read_template(path):
         contents = f.read()
         return contents
 
-def parse_template(path):
-    file_contents = read_template(path)
+def get_match_locations(file_contents):
+    part_matches = re.finditer(PROMPT_REGEX, file_contents)
+    return part_matches
+
+def strip_template(file_contents):
     stripped = re.sub(PROMPT_REGEX,PROMPT_WRAPPER,file_contents)
-    parts = re.finditer(PROMPT_REGEX, file_contents)
+    return stripped
+    
+def parse_template(file_contents):
+    # stripped = re.sub(PROMPT_REGEX,PROMPT_WRAPPER,file_contents)
+    # part_matches = re.finditer(PROMPT_REGEX, file_contents)
+    stripped = strip_template(file_contents)
+    parts = get_match_locations(file_contents)
     stripped_parts = []
     for prompt in parts:
         prompt = re.sub(PROMPT_WRAPPER_REGEX,'',file_contents[prompt.start():prompt.end()])
