@@ -63,11 +63,8 @@ def merge(stripped_template,answers):
     '''
     Merges the stripped template string with answers given by the user
     '''
-    print(stripped_template)
-    print(answers)
     parts = tuple(get_match_locations(stripped_template))
     for i in range(len(parts)):
-        print(answers[i])
         stripped_template = re.sub(PROMPT_REGEX,answers[i],stripped_template,1)
     return stripped_template
 
