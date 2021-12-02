@@ -1,5 +1,14 @@
 import re
 
+TEMPLATE_PATH = 'assets/dark_and_stormy_night_template.txt'
+
+OUTPUT_PATH = 'assets/completed_madlib.txt'
+
+FORBIDDEN_CHARS = ('\"{\"','\"}\"')
+
+GREETING = '''Welcome to Madlib CLI!
+You will be prompted to enter a series of words in the terminal.
+Have fun!'''
 # regex built based off of answers from https://stackoverflow.com/questions/3335562/regex-to-select-everything-between-two-characters
 # original idea was to use {(\w{1,} ?)*} however this did not account for prompts containing punctuation or numbers
 # regex matches any characters between { and }, the ? makes it so that the match ends after the next closing curly bracket rather than the last closing curly in given string
@@ -65,20 +74,25 @@ def merge(stripped_template,answers):
 def play(path):
     try:
         file_contents = read_template(path)
+        print(GREETING)
         parsed_template = parse_template(file_contents)
         answers = []
         for i in range(len(parsed_template[1])):
             user_in = input(f'Please enter a(n) {parsed_template[1][i]}:\n> ')
             while not len(re.findall(PROMPT_WRAPPER_REGEX,user_in)) == 0:
-                print('Answer cannot contain \"{\" or \"}\".')
+                message = 'Answer cannot contain '
+                for i in range(len(FORBIDDEN_CHARS) - 1):
+                    message += f' {FORBIDDEN_CHARS[i]} or'
+                message += f' {FORBIDDEN_CHARS[len(FORBIDDEN_CHARS) - 1]}'
+                print(message)
                 user_in = input(f'Please enter a(n) {parsed_template[1][i]}:\n> ')
             answers.append(user_in)
         output = merge(parsed_template[0],answers)
         print(output)
-        with open('assets/completed_madlib.txt','w') as f:
+        with open(OUTPUT_PATH,'w') as f:
             f.write(output)
     except FileNotFoundError:
         print('File Not Found.')
     except: 
         print('Something went wrong.')
-play('assets/dark_and_stormy_night_template.txt')
+play(TEMPLATE_PATH)
