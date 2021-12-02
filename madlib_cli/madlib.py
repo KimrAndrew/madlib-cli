@@ -26,20 +26,27 @@ def get_match_locations(file_contents):
 def strip_template(file_contents):
     stripped = re.sub(PROMPT_REGEX,PROMPT_WRAPPER,file_contents)
     return stripped
-    
+
 def parse_template(file_contents):
-    # stripped = re.sub(PROMPT_REGEX,PROMPT_WRAPPER,file_contents)
-    # part_matches = re.finditer(PROMPT_REGEX, file_contents)
     stripped = strip_template(file_contents)
     parts = get_match_locations(file_contents)
     stripped_parts = []
     for prompt in parts:
-        prompt = re.sub(PROMPT_WRAPPER_REGEX,'',file_contents[prompt.start():prompt.end()])
-        print(prompt)
+        #prompt = re.sub(PROMPT_WRAPPER_REGEX,'',file_contents[prompt.start():prompt.end()])
+        prompt = re.sub(PROMPT_WRAPPER_REGEX,'',prompt.group())
+        #print(prompt)
         stripped_parts.append(prompt)
     stripped_parts = tuple(stripped_parts)
     return stripped,stripped_parts
         
-parse_template('assets/dark_and_stormy_night_template.txt')
+#parse_template('assets/dark_and_stormy_night_template.txt')
 def merge(stripped_template,answers):
-    pass
+    print(stripped_template)
+    print(answers)
+    parts = tuple(get_match_locations(stripped_template))
+    for i in range(len(parts)):
+        print(answers[i])
+        stripped_template = re.sub(PROMPT_REGEX,answers[i],stripped_template,1)
+    return stripped_template
+parsed = parse_template(read_template('assets/dark_and_stormy_night_template.txt'))
+merge(parsed[0],parsed[1])

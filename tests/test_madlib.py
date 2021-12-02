@@ -16,7 +16,7 @@ def test_strip_template():
     actual = strip_template(file_contents)
     expected = "It was a {} and {} {}."
     assert actual == expected
-    
+
 def test_parse_template():
     actual_stripped, actual_parts = parse_template(
         "It was a {Adjective} and {Adjective} {Noun}."
@@ -28,7 +28,7 @@ def test_parse_template():
     assert actual_parts == expected_parts
 
 
-@pytest.mark.skip("pending")
+
 def test_merge():
     actual = merge("It was a {} and {} {}.", ("dark", "stormy", "night"))
     expected = "It was a dark and stormy night."
