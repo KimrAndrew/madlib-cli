@@ -20,14 +20,24 @@ def read_template(path):
         return contents
 
 def get_match_locations(file_contents):
+    '''
+    Takes in a string as input, returns an iterable containing Match objects
+    '''
     part_matches = re.finditer(PROMPT_REGEX, file_contents)
     return part_matches
 
 def strip_template(file_contents):
+    '''
+    Takes in a string as input, returns same string but with the prompts stripped
+    '''
     stripped = re.sub(PROMPT_REGEX,PROMPT_WRAPPER,file_contents)
     return stripped
 
 def parse_template(file_contents):
+    '''
+    Parses input string, returns a tuple containing the stripped input string
+    and a tuple containg the prompts in the order that they were stripped
+    '''
     stripped = strip_template(file_contents)
     parts = get_match_locations(file_contents)
     stripped_parts = []
@@ -41,6 +51,9 @@ def parse_template(file_contents):
         
 #parse_template('assets/dark_and_stormy_night_template.txt')
 def merge(stripped_template,answers):
+    '''
+    Merges the stripped template string with answers given by the user
+    '''
     print(stripped_template)
     print(answers)
     parts = tuple(get_match_locations(stripped_template))
@@ -48,3 +61,24 @@ def merge(stripped_template,answers):
         print(answers[i])
         stripped_template = re.sub(PROMPT_REGEX,answers[i],stripped_template,1)
     return stripped_template
+
+def play(path):
+    try:
+        file_contents = read_template(path)
+        parsed_template = parse_template(file_contents)
+        answers = []
+        for i in range(len(parsed_template[1])):
+            user_in = input(f'Please enter a(n) {parsed_template[1][i]}:\n> ')
+            while not len(re.findall(PROMPT_WRAPPER_REGEX,user_in)) == 0:
+                print('Answer cannot contain \"{\" or \"}\".')
+                user_in = input(f'Please enter a(n) {parsed_template[1][i]}:\n> ')
+            answers.append(user_in)
+        output = merge(parsed_template[0],answers)
+        print(output)
+        with open('assets/completed_madlib.txt','w') as f:
+            f.write(output)
+    except FileNotFoundError:
+        print('File Not Found.')
+    except: 
+        print('Something went wrong.')
+play('assets/dark_and_stormy_night_template.txt')
