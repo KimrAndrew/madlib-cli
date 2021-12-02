@@ -48,5 +48,3 @@ def merge(stripped_template,answers):
         print(answers[i])
         stripped_template = re.sub(PROMPT_REGEX,answers[i],stripped_template,1)
     return stripped_template
-parsed = parse_template(read_template('assets/dark_and_stormy_night_template.txt'))
-merge(parsed[0],parsed[1])
